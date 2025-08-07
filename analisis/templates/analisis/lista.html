@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de textos</title>
+</head>
+<body>
+    <h2>Textos subidos</h2>
+    <ul>
+        {% for texto in textos %}
+            <li>{{ texto.titulo }} - <a href="{{ texto.archivo.url }}">Ver archivo</a></li>
+        {% empty %}
+            <li>No hay textos aún.</li>
+        {% endfor %}
+    </ul>
+    <a href="/subir/">Subir otro texto</a>
+</body>
+</html>
