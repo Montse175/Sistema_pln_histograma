@@ -1,17 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
     <title>Lista de textos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+            color: #eaeaea;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4ea1ff; /* azul título */
+            text-shadow: 0 0 8px rgba(78,161,255,0.35);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            max-width: 700px;
+            margin: 20px auto;
+        }
+
+        li {
+            background: rgba(255,255,255,0.06);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        li:hover {
+            background: rgba(255,204,0,0.18); /* amarillo suave al pasar */
+            transform: scale(1.01);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+        }
+
+        a {
+            color: #ffcc00;  /* enlaces amarillo */
+            text-decoration: none;
+            margin: 0 5px;
+            font-weight: bold;
+            transition: color 0.2s, text-shadow 0.2s;
+        }
+
+        a:hover {
+            color: #ffe066;
+            text-shadow: 0 0 6px rgba(255,204,0,0.6);
+        }
+
+        .btn-subir {
+            display: inline-block;
+            margin: 30px auto;
+            padding: 12px 20px;
+            background: #4ea1ff; /* botón azul */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+            transition: background 0.3s, transform 0.2s;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .btn-subir:hover {
+            background: #357edd;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
-    <h2>Textos subidos</h2>
+    <h2> Textos agregados</h2>
     <ul>
         {% for texto in textos %}
-            <li>{{ texto.titulo }} - <a href="{{ texto.archivo.url }}">Ver archivo</a></li>
+            <li>
+                <span>{{ texto.titulo }}</span>
+                <span>
+                    <a href="{{ texto.archivo.url }}"> Ver archivo</a> |
+                    <a href="{% url 'generar_histograma' texto.id %}">Generar histograma</a>
+                </span>
+            </li>
         {% empty %}
             <li>No hay textos aún.</li>
         {% endfor %}
     </ul>
-    <a href="/subir/">Subir otro texto</a>
+
+    <div style="text-align:center;">
+        <a class="btn-subir" href="/subir/"> Subir otro texto</a>
+    </div>
 </body>
 </html>
