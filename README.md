@@ -6,7 +6,7 @@ Este proyecto es un sistema en **Django** para **subir archivos de texto**, gene
 
 ## Requisitos
 - Python 3.10 o superior (probado en Python 3.13.2)  
-- [Pipenv](https://pipenv.pypa.io/en/latest/) instalado globalmente  
+- [Pipenv](https://pipenv.pypa.io/en/latest/) instalado   
 - Git para clonar el repositorio  
 
 ---
