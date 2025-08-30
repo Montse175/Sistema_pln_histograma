@@ -1,69 +1,105 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Subir texto</title>
-    <!-- Bootstrap CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #eaeaea;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .card {
-            border-radius: 1rem;
-            box-shadow: 0 10px 24px rgba(0,0,0,0.6);
-            background: #1e1e1e;
-            border: 1px solid #2a2a2a;
-        }
-        .btn-morado {
-            /* ahora azul para combinar con el histograma */
-            background-color: #4ea1ff;
-            color: #fff;
-            border: none;
-        }
-        .btn-morado:hover {
-            background-color: #357edd;
-            color: #fff;
-        }
-        a {
-            text-decoration: none;
-        }
-        a.texto-link {
-            /* acento amarillo como en el histograma */
-            color: #ffcc00;
-            font-weight: bold;
-        }
-        a.texto-link:hover {
-            color: #ffe066;
-        }
-        h2.text-primary {
-            /* reemplaza el azul bootstrap por un azul fijo */
-            color: #4ea1ff !important;
-            text-shadow: 0 0 8px rgba(78,161,255,0.35);
-        }
-    </style>
+    <title>Normalizar Texto</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="{% static 'analisis/css/subir.css' %}">
 </head>
-<body>
-    <div class="container">
-        <div class="card p-4 shadow-lg">
-            <h2 class="text-center text-primary mb-4"> Subir nuevo texto</h2>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-4">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Normalización de Texto</h2>
+
+            <!-- Formulario -->
             <form method="post" enctype="multipart/form-data" class="mb-3">
                 {% csrf_token %}
                 <div class="mb-3">
                     {{ form.as_p }}
                 </div>
-                <button type="submit" class="btn btn-morado w-100">Subir </button>
+
+                <!-- Opciones -->
+                <div class="mb-3">
+                    <h5 class="fw-bold">Opciones de limpieza:</h5>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="select_all">
+                        <label class="form-check-label" for="select_all">Seleccionar todo</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="opciones" value="minusculas" id="minusculas">
+                        <label class="form-check-label" for="minusculas">Convertir a minúsculas</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="opciones" value="puntuacion" id="puntuacion">
+                        <label class="form-check-label" for="puntuacion">Eliminar puntuación</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="opciones" value="stopwords" id="stopwords">
+                        <label class="form-check-label" for="stopwords">Eliminar stopwords</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="opciones" value="comillas" id="comillas">
+                        <label class="form-check-label" for="comillas">Eliminar comillas (" ')</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="opciones" value="acentos" id="acentos">
+                        <label class="form-check-label" for="acentos">Eliminar acentos</label>
+                    </div>
+                </div>
+
+                <!-- Botón -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                        Procesar Texto
+                    </button>
+                </div>
+<!-- Resultado -->
+{% if texto_original %}
+<div class="mt-4">
+    <h5>Texto original:</h5>
+    <div class="alert alert-secondary">
+        {{ texto_original }}
+    </div>
+</div>
+{% endif %}
+
+{% if texto_procesado %}
+<div class="mt-4">
+    <h5>Texto procesado:</h5>
+    <div class="alert alert-success">
+        {{ texto_procesado}}
+    </div>
+</div>
+{% endif %}
+
+
+
+
             </form>
+
+            <!-- Link -->
             <div class="text-center">
-                <a href="/" class="texto-link"> Ver lista de textos</a>
+                <a href="/" class="texto-link">Ver lista de textos</a>
             </div>
         </div>
     </div>
+</div>
+
+<!-- JS personalizado -->
+<script src="{% static 'analisis/js/opcionesSubir.js' %}"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

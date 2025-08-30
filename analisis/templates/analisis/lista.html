@@ -1,99 +1,68 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Lista de textos</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-            color: #eaeaea;
-            margin: 0;
-            padding: 20px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #4ea1ff; /* azul título */
-            text-shadow: 0 0 8px rgba(78,161,255,0.35);
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-            max-width: 700px;
-            margin: 20px auto;
-        }
-
-        li {
-            background: rgba(255,255,255,0.06);
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-
-        li:hover {
-            background: rgba(255,204,0,0.18); /* amarillo suave al pasar */
-            transform: scale(1.01);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.45);
-        }
-
-        a {
-            color: #ffcc00;  /* enlaces amarillo */
-            text-decoration: none;
-            margin: 0 5px;
-            font-weight: bold;
-            transition: color 0.2s, text-shadow 0.2s;
-        }
-
-        a:hover {
-            color: #ffe066;
-            text-shadow: 0 0 6px rgba(255,204,0,0.6);
-        }
-
-        .btn-subir {
-            display: inline-block;
-            margin: 30px auto;
-            padding: 12px 20px;
-            background: #4ea1ff; /* botón azul */
-            color: #fff;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: bold;
-            text-align: center;
-            transition: background 0.3s, transform 0.2s;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .btn-subir:hover {
-            background: #357edd;
-            transform: scale(1.05);
-        }
-    </style>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'analisis/css/lista.css' %}">
 </head>
-<body>
-    <h2> Textos agregados</h2>
-    <ul>
-        {% for texto in textos %}
-            <li>
-                <span>{{ texto.titulo }}</span>
-                <span>
-                    <a href="{{ texto.archivo.url }}"> Ver archivo</a> |
-                    <a href="{% url 'generar_histograma' texto.id %}">Generar histograma</a>
-                </span>
-            </li>
-        {% empty %}
-            <li>No hay textos aún.</li>
-        {% endfor %}
-    </ul>
+<body class="bg-light">
 
-    <div style="text-align:center;">
-        <a class="btn-subir" href="/subir/"> Subir otro texto</a>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">📑 Textos agregados</h2>
+
+    {% if textos %}
+        <div class="row">
+            {% for texto in textos %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm rounded-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ texto.titulo }}</h5>
+                            <h6 class="card-subtitle text-muted mb-2">
+                                Subido el {{ texto.fecha_subida|date:"d/m/Y H:i" }}
+                            </h6>
+
+                            <p><strong>Texto original:</strong></p>
+                            <div class="alert alert-secondary small" style="max-height: 150px; overflow-y: auto;">
+                                {{ texto.texto_original }}
+                            </div>
+
+                            <p><strong>Texto procesado:</strong></p>
+                            <div class="alert alert-success small" style="max-height: 150px; overflow-y: auto;">
+                                {{ texto.texto_procesado }}
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="d-flex justify-content-between mt-3">
+                                <a href="{{ texto.archivo.url }}" class="btn btn-sm btn-outline-primary">📂 Ver archivo</a>
+                                <a href="{% url 'generar_histograma' texto.id %}" class="btn btn-sm btn-outline-info">📊 Histograma</a>
+                                <a href="{% url 'eliminar_texto' texto.id %}" class="btn btn-sm btn-outline-danger"
+                                   onclick="return confirm('¿Seguro que deseas eliminar este texto?');">
+                                    🗑 Eliminar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center">
+            No hay textos aún.
+        </div>
+    {% endif %}
+
+    <!-- Botón subir -->
+    <div class="text-center mt-4">
+        <a class="btn btn-lg btn-success rounded-pill shadow-sm" href="/subir/">
+            ⬆️ Subir otro texto
+        </a>
     </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

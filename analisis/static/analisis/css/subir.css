@@ -1,0 +1,32 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+    color: #eaeaea;
+    min-height: 100vh;
+}
+
+.card {
+    border-radius: 1rem;
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    color: #eaeaea;
+}
+
+.btn-primary {
+    background-color: #4ea1ff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #357edd;
+}
+
+a.texto-link {
+    color: #ffcc00;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.texto-link:hover {
+    color: #ffe066;
+}
