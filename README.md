@@ -59,6 +59,7 @@ python
 Dentro de la consola de Python, copia y pega:
 
 import nltk
+
 nltk.download('stopwords')
 
 ya que se haya descargado escribes exit
