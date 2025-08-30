@@ -47,14 +47,20 @@ Panel de administración:
 (usar el superusuario creado).
 
 ## Notas de Actualización 29/08/2025 Normalización de texto
+
 Abre la terminal o CMD en la carpeta del proyecto Sistema_pln_histograma
+
 Y si no tienes instalado nltk descargalo usando el siguiente comando:
 pip install nltk
+
 Si es la primera vez que lo instalas deberas ejecutar Python escribiendo:
 python
+
 Dentro de la consola de Python, copia y pega:
+
 import nltk
 nltk.download('stopwords')
+
 ya que se haya descargado escribes exit
 Ahora podrás usar la funcionalidad de eliminación de stopwords en español sin problemas.
 
