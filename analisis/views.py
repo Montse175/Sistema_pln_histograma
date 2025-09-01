@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import TextoAnalizadoForm
 from .models import TextoAnalizado
 
-from collections import defaultdict
-import string
+from collections import defaultdict, Counter
 import re
 from nltk.corpus import stopwords
 import unicodedata
+from nltk.util import ngrams
 
 # ======= Función de limpieza / normalización =======
 def limpiar_texto(texto, opciones):
@@ -20,7 +20,7 @@ def limpiar_texto(texto, opciones):
     if "puntuacion" in opciones:
         texto_procesado = re.sub(r'[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]', '', texto_procesado)
 
-      # Quitar acentos
+    # Quitar acentos
     if "acentos" in opciones:
         texto_procesado = ''.join(
             c for c in unicodedata.normalize('NFD', texto_procesado)
@@ -41,7 +41,7 @@ def limpiar_texto(texto, opciones):
     return " ".join(tokens), tokens
 
 
-# ======= Subir texto =======
+# ======= Subir texto + cálculo de n-gramas =======
 def subir_texto(request):
     if request.method == 'POST':
         form = TextoAnalizadoForm(request.POST, request.FILES)
@@ -60,11 +60,27 @@ def subir_texto(request):
             texto_obj.texto_procesado = texto_procesado
             texto_obj.save()
 
+            # ==== NUEVO: cálculo de n-gramas ====
+            try:
+                n_raw = (request.POST.get("n") or "").strip()
+                n_value = int(n_raw) if n_raw else 2
+            except ValueError:
+                n_value = 2
+
+            if n_value < 2:   # aseguramos mínimo 2
+                n_value = 2
+
+            ngramas = list(ngrams(tokens_limpios, n_value))
+            frecuencias = Counter(ngramas)
+
             return render(request, 'analisis/subir.html', {
                 'form': TextoAnalizadoForm(),
                 'texto_original': texto_obj.texto_original,
                 'texto_procesado': texto_obj.texto_procesado,
-                'tokens': tokens_limpios
+                'tokens': tokens_limpios,
+                'n': n_value,
+                'ngramas': ngramas,
+                'frecuencias': dict(frecuencias)
             })
     else:
         form = TextoAnalizadoForm()
@@ -79,11 +95,10 @@ def lista_textos(request):
 
 
 # ======= Eliminar texto =======
-def eliminar_texto(request, pk):
-    texto = get_object_or_404(TextoAnalizado, pk=pk)
+def eliminar_texto(request, texto_id):
+    texto = get_object_or_404(TextoAnalizado, pk=texto_id)
     texto.delete()
     return redirect('lista_textos')
-
 
 # ======= Histograma =======
 def generar_histograma(request, texto_id):
@@ -91,7 +106,6 @@ def generar_histograma(request, texto_id):
 
     # Usamos el texto procesado en lugar del archivo crudo
     contenido = texto.texto_procesado or ""
-
     palabras = contenido.split()
 
     conteo_dic = defaultdict(int)
@@ -105,7 +119,3 @@ def generar_histograma(request, texto_id):
         'texto': texto,
         'conteo': conteo
     })
-def eliminar_texto(request, texto_id):
-    texto = get_object_or_404(TextoAnalizado, id=texto_id)
-    texto.delete()
-    return redirect('lista_textos')
