@@ -7,5 +7,9 @@ urlpatterns = [
     path('histograma/<int:texto_id>/', views.generar_histograma, name='generar_histograma'),  
     # path("normalizar/", views.normalizar_texto, name="normalizar"),  # (comentado)
     path('eliminar/<int:texto_id>/', views.eliminar_texto, name='eliminar_texto'),
+    path('mle/<int:texto_id>/', views.calcular_mle, name='calcular_mle'),
+    path('mle_fronteras/<int:texto_id>/', views.calcular_mle_fronteras, name='calcular_mle_fronteras'),
+    
+
  
 ]

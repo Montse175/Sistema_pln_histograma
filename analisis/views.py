@@ -119,3 +119,71 @@ def generar_histograma(request, texto_id):
         'texto': texto,
         'conteo': conteo
     })
+
+# ======= Cálculo MLE para bigramas =======
+def calcular_mle(request, texto_id):
+    texto = get_object_or_404(TextoAnalizado, id=texto_id)
+    contenido = texto.texto_procesado or ""
+
+    # 🔹 Tokenizador rápido sin NLTK
+    tokens = re.findall(r'\w+', contenido.lower())  # quita puntuación y normaliza a minúsculas
+
+    unigramas = Counter(tokens)
+    bigramas = Counter(ngrams(tokens, 2))
+
+    mle_resultados = []
+    for (w1, w2), conteo_bigram in bigramas.items():
+        prob = conteo_bigram / unigramas[w1]
+        mle_resultados.append({
+            'w1': w1,
+            'w2': w2,
+            'conteo_bigram': conteo_bigram,
+            'conteo_unigrama': unigramas[w1],
+            'probabilidad': round(prob, 4)
+        })
+
+    return render(request, 'analisis/mle.html', {
+        'texto': texto,
+        'tokens': tokens,
+        'resultados': mle_resultados,
+        'unigramas': dict(unigramas),
+        'bigramas': dict(bigramas),
+    })
+
+
+# ======= Cálculo MLE con fronteras de oración =======
+def calcular_mle_fronteras(request, texto_id):
+    texto = get_object_or_404(TextoAnalizado, id=texto_id)
+    contenido = texto.texto_procesado or ""
+
+    # Dividir en oraciones
+    oraciones = [o.strip() for o in contenido.split(".") if o.strip()]
+
+    palabras = []
+    for oracion in oraciones:
+        tokens = re.findall(r'\w+', oracion.lower())
+        if tokens:
+            palabras.extend(["<s>"] + tokens + ["</s>"])
+
+    unigramas = Counter(palabras)
+    bigramas = Counter(ngrams(palabras, 2))
+
+    mle_resultados = []
+    for (w1, w2), conteo_bigram in bigramas.items():
+        prob = conteo_bigram / unigramas[w1]
+        mle_resultados.append({
+            'w1': w1,
+            'w2': w2,
+            'conteo_bigram': conteo_bigram,
+            'conteo_unigrama': unigramas[w1],
+            'probabilidad': round(prob, 4)
+        })
+
+    return render(request, 'analisis/mle_fronteras.html', {
+        'texto': texto,
+        'tokens': palabras,
+        'resultados': mle_resultados,
+        'unigramas': dict(unigramas),
+        'bigramas': dict(bigramas),
+    })
+

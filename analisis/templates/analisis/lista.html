@@ -39,9 +39,14 @@
                                 <a href="{{ texto.archivo.url }}" class="btn btn-sm btn-outline-primary">📂 Ver archivo</a>
                                 <a href="{% url 'generar_histograma' texto.id %}" class="btn btn-sm btn-outline-info">📊 Histograma</a>
                                 <a href="{% url 'eliminar_texto' texto.id %}" class="btn btn-sm btn-outline-danger"
+                                
+
                                    onclick="return confirm('¿Seguro que deseas eliminar este texto?');">
                                     🗑 Eliminar
                                 </a>
+                                <a href="{% url 'calcular_mle' texto.id %}"> Calcular MLE</a>
+                                <a href="{% url 'calcular_mle_fronteras' texto.id %}">MLE con fronteras</a>
+                                
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MLE con fronteras - {{ texto.titulo }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light">
+    <div class="container mt-4">
+        <h2 class="mb-4 text-warning">Probabilidades MLE con fronteras - {{ texto.titulo }}</h2>
+
+        <!-- Estadísticas generales -->
+        <div class="mb-4">
+            <span class="badge bg-primary">Total unigramas: {{ unigramas|length }}</span>
+            <span class="badge bg-success">Total bigramas: {{ bigramas|length }}</span>
+        </div>
+
+        <!-- Tabla de MLE -->
+        <div class="table-responsive">
+
+            <table class="table table-striped table-bordered table-dark shadow">
+                <thead class="table-warning text-dark">
+                    <tr>
+                        <th>Bigrama</th>
+                        <th>Conteo bigrama</th>
+                        <th>Conteo unigrama</th>
+                        <th>Probabilidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in resultados %}
+                    <tr>
+                        <td><strong>{{ item.w1 }}</strong> {{ item.w2 }}</td>
+                        <td>{{ item.conteo_bigram }}</td>
+                        <td>{{ item.conteo_unigrama }}</td>
+                        <td>{{ item.probabilidad }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+               <!-- Tokens con fronteras -->
+<div class="mb-4">
+    <h5 class="text-info">Tokens con fronteras:</h5>
+    <p>
+        {% for token in tokens %}
+            <span class="badge bg-secondary">{{ token }}</span>
+        {% endfor %}
+    </p>
+</div>
+
+        </div>
+
+        <a href="/" class="btn btn-secondary mt-3">⬅ Volver</a>
+    </div>
+
+    <!-- Optional: Bootstrap JS for responsive features -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
