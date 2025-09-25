@@ -35,18 +35,50 @@
                             </div>
 
                             <!-- Botones -->
-                            <div class="d-flex justify-content-between mt-3">
+                            <div class="d-flex flex-wrap gap-2 mt-3">
                                 <a href="{{ texto.archivo.url }}" class="btn btn-sm btn-outline-primary">📂 Ver archivo</a>
                                 <a href="{% url 'generar_histograma' texto.id %}" class="btn btn-sm btn-outline-info">📊 Histograma</a>
+                                <a href="{% url 'generar_ngrams' texto.id %}" class="btn btn-sm btn-outline-success">🔢 Generar N-gramas</a>
+                                <a href="{% url 'ver_ngrams' texto.id %}" class="btn btn-sm btn-outline-warning">🔡 Ver N-gramas</a>
                                 <a href="{% url 'eliminar_texto' texto.id %}" class="btn btn-sm btn-outline-danger"
-                                
-
                                    onclick="return confirm('¿Seguro que deseas eliminar este texto?');">
                                     🗑 Eliminar
                                 </a>
-                                <a href="{% url 'calcular_mle' texto.id %}"> Calcular MLE</a>
-                                <a href="{% url 'calcular_mle_fronteras' texto.id %}">MLE con fronteras</a>
-                                
+
+                                <!-- Dropdown MLE -->
+                                <div class="dropdown d-inline-block">
+                                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Calcular MLE
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'calcular_mle' texto.id 1 %}">Unigramas (n=1)</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'calcular_mle' texto.id 2 %}">Bigramas (n=2)</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'calcular_mle' texto.id 3 %}">Trigramas (n=3)</a></li>
+                                    </ul>
+                                </div>
+
+                                <!-- Dropdown MLE con fronteras -->
+                                <div class="dropdown d-inline-block">
+                                    <button class="btn btn-sm btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        MLE con fronteras
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'calcular_mle_fronteras' texto.id 1 %}">Unigramas (n=1)</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'calcular_mle_fronteras' texto.id 2 %}">Bigramas (n=2)</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'calcular_mle_fronteras' texto.id 3 %}">Trigramas (n=3)</a></li>
+                                    </ul>
+                                </div>
+                                 <!-- Dropdown Autocompletar -->
+    <div class="dropdown d-inline-block">
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+             Autocompletar
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'autocompletar' texto.id 1 %}">Unigramas (n=1)</a></li>
+            <li><a class="dropdown-item" href="{% url 'autocompletar' texto.id 2 %}">Bigramas (n=2)</a></li>
+            <li><a class="dropdown-item" href="{% url 'autocompletar' texto.id 3 %}">Trigramas (n=3)</a></li>
+        </ul>
+    </div>
                             </div>
                         </div>
                     </div>
@@ -62,7 +94,7 @@
     <!-- Botón subir -->
     <div class="text-center mt-4">
         <a class="btn btn-lg btn-success rounded-pill shadow-sm" href="/subir/">
-            ⬆️ Subir otro texto
+             Subir otro texto
         </a>
     </div>
 </div>

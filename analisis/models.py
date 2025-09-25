@@ -13,3 +13,15 @@ class TextoAnalizado(models.Model):
 
     def __str__(self):
         return f"Texto {self.id} - {self.fecha_subida}"
+
+class Ngrama(models.Model):
+    texto = models.ForeignKey(TextoAnalizado, on_delete=models.CASCADE, related_name="ngramas")
+    n = models.IntegerField()  # si es bigrama (2), trigramas (3), etc.
+    secuencia = models.TextField(default="")
+ 
+    frecuencia = models.IntegerField(default=0)
+    class Meta:
+        ordering = ['-frecuencia', 'secuencia']  # Primero por frecuencia descendente, luego alfabéticamente
+
+    def __str__(self):
+        return f"{self.secuencia} ({self.frecuencia})"
